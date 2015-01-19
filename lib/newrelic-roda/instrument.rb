@@ -18,7 +18,7 @@ module NewRelic
             begin
               txn_name = _route_name
               unless txn_name.nil?
-                ::NewRelic::Agent::Transaction.set_default_transaction_name(
+                ::NewRelic::Agent::Transaction.set_transaction_name(
                     "#{self.class.name}/#{txn_name}", :category => :sinatra)
               end
             rescue => e
@@ -48,8 +48,7 @@ module NewRelic
           end
 
           def _route_name
-            request.path
-            #"#{request_method} #{env.fetch('new_relic.roda',['/']).join('/')}"
+            "#{request_method} #{env.fetch('REQUEST_PATH', ['/'])}"
           end
         end
 
